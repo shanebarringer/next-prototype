@@ -66,7 +66,7 @@ This method has a few quirks, but once you become accustomed, it's pretty easy t
 
 Nested routes work as you would expect. However the naming convention is slightly different. In the example application you'll see the following file structure: 
 
-![./public/pages-directory.png]
+![public/pages-directory.png]
 
 
 You'll notice an unusual _bracket_ syntax under `blogs` and `users`: `/blogs/[title].js` & `/users/[id]/todos.js`
@@ -76,7 +76,7 @@ This syntax allows for dynamic values to be utilized for various components. The
 _note: the bracket syntax can be used for files or directories_
 
 
-![./public/dynamic-route-steps-1.png]
+![public/dynamic-route-steps-1.png]
 
 #### Steps: 
 _note: `getStaticPaths` & `getStaticProps` will be covered later in this document._
