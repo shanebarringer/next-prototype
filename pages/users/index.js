@@ -29,10 +29,19 @@ const Users = () => {
   );
 };
 
+// assign next-redux-wrapper's `getStaticProps` to a local `async` function
+// this will be exported and called at build-time by Next.js
+// note: the `store` argument will be supplied when the callback is invoked
 export const getStaticProps = wrapper.getStaticProps(async ({ store }) => {
+  // only run this function if there is no user data in the store
   if (!store.getState().users.data?.length) {
+    // dispatch the `fetchUsers` action { type: FETCH_USERS }
     store.dispatch(fetchUsers());
+
+    // cancel any outstanding tasks
     store.dispatch(END);
+
+    // convert sagaTask (sagaMiddleware.run) to a promise and await result
     await store.sagaTask.toPromise();
   }
 });
