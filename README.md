@@ -198,7 +198,7 @@ Next offers two main options for pre-rendering:
 - Static Genration via `getStaticProps` 
 - Server Side Rendering via `getServerSideProps`
 
-![](static-ssr-description.png)
+![](public/static-ssr-description.png)
 
 *This application demonstrates both options and will be noted accordingly.*
 
@@ -245,7 +245,7 @@ The docs go on to state:
 
 *An example of how markdown can be consumed* 
 
-![](getStaticProps.png)
+![](public/getStaticProps.png)
 
 
 _you can also import data directly from API calls_
@@ -303,7 +303,7 @@ According to the docs:
 
 > You should use `getServerSideProps` *only* if you need to pre-render a page whose data must be fetched at request time. 
 
-![](Pasted image 1.png)
+![](public/Pasted image 1.png)
 
 
 #### usage
@@ -385,7 +385,7 @@ See below, for a few more nice-to-know attributes of Next.js
 
 If you don't need to pre-render data, you can always fall back to client-side-rendering, or even mix & match your approach depending on the needs.
 
-![](static-client-hybrid.png)
+![](public/static-client-hybrid.png)
 
 ---
 
