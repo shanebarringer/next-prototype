@@ -303,7 +303,7 @@ According to the docs:
 
 > You should use `getServerSideProps` *only* if you need to pre-render a page whose data must be fetched at request time. 
 
-![](public/Pasted image 1.png)
+![](public/ssr.png)
 
 
 #### usage
