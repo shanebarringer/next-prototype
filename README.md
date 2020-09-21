@@ -374,8 +374,139 @@ export const getStaticProps = wrapper.getStaticProps(async ({ store }) => {
 - convert sagaTask (found in the `makeStore` function in `/store/index.js`) to a promise and `await` result
 
 
+### Working with user data
+
+Now that we have data, we can work with it. 
+
+We'll start with the `useSelector` hook from `react-redux`
+
+```javascript
+const Users = () => {
+  // utilize the `useSelector` hook to access data provided by the store
+  const { users } = useSelector((state) => ({ users: state.users }));
+  
+  // return...
+};
+```
+
+The `useSelector` hook allows us to retrieve data directly from the store. 
+_note: this is one of several approaches to accessing data inside of your component. We'll explore other options in the code below_ 
+
+
+
+Now that we have users, we'll want to provide a link that transfers to a page with tasks that belong to the user.
+
+```javascript
+const Users = () => {
+  // ...useSelector
+
+  return (
+      {/* ... */}
+        {users.data.map((user) => (
+            <Link href="/users/[id]/todos" as={`/users/${user.id}/todos`}>
+              todos
+            </Link>
+      
+        ))}
+      {/* ... */}
+  );
+};
+```
+
+Above, we'll use the `as` prop to specify the value to supply as the `id`. Resulting in: `/users/1/todos` 
+_note: As of Next.js 9.5.3, there is an alternative way to approach dynamic links/routing. Check out the docs for more details_
+
+Considering the file-based routing provided by Next, you'll notice the `users` directory has a child `[id]` directory, and the `[id]` directory contains a `todos.js`  file:  `users` -> `[id]` -> `todos.js`.
+
+
 
 ---
+
+## Todos
+
+Moving on, next w'ell look at todos.
+
+First, we need to consider that a user's todo items will change status quite often. So generating these items at build time won't work. 
+Instead, we can leverage *server-side rendering* and fetch the data upon each request.
+
+```javascript
+// imports...
+const Todos = ({ data }) => {
+	// return jsx...
+}
+
+
+// Assign next-redux-wrapper's `getServerSideProps` function to our own version
+// pass in `params` from the `context` object provided by Next {store, params}
+export const getServerSideProps = wrapper.getServerSideProps(
+  async ({ store, params }) => {
+
+    // check for the presence of data and initiate request if necessary
+    if (!store.getState().todos.data?.length) {
+      store.dispatch(fetchUserTodos(params.id));
+      store.dispatch(END);
+      await store.sagaTask.toPromise();
+    }
+
+    const { data } = store.getState().todos;
+
+    // return props object that will be passed to the `Todos` component
+    return { props: { data } };
+  }
+);
+
+
+export default Todos;
+```
+
+- Create our own version of `getServerSideProps` to be exported with our component (and made available to Next.js)
+- Provide `store` and `context` values (`params` in this instance)
+- Return `props` that will be passed to the component
+
+---
+
+Inside of the the `Todos` component we'll find the following: 
+
+```javascript
+import React from 'react';
+import { useRouter } from 'next/router';
+// other imports ...
+
+const Todos = ({ data }) => {
+  const router = useRouter();
+
+  // get ID from URL param /users/[id]/todos
+  const { id } = router.query;
+
+  // lookup user in state via ID
+  const user = useSelector((state) =>
+    state.users.data.find((u) => u.id === parseInt(id, 10))
+  );
+
+  // create two arrays (complete/incomplete tasks) from larger list of todos
+  const { true: complete, false: incomplete } = groupBy(data, 'completed');
+
+  return (
+    <main className={styles.main}>
+      <h3 className={styles.title}>Todos for {user?.name}</h3>
+      <TodoPieChart complete={complete} incomplete={incomplete} />
+    </main>
+  );
+};
+
+// getServerSideProps ...
+
+export default Todos;
+```
+
+- Create a `router` object with the `useRouter` hook
+- Get the `ID` param from the URL
+- Find the correct user
+- Create two arrays (for presentational purposes only)
+
+
+---
+
 
 ## Additional Info
 

@@ -1,6 +1,6 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import { useRouter } from 'next/router';
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { END } from 'redux-saga';
 import { groupBy } from 'lodash';
 import { fetchUserTodos } from '../../../actions';
@@ -31,15 +31,20 @@ const Todos = ({ data }) => {
   );
 };
 
-//
+// Assign next-redux-wrapper's `getServerSideProps` function to our own version
+// pass in `params` from the `context` object provided by Next {store, params}
 export const getServerSideProps = wrapper.getServerSideProps(
   async ({ store, params }) => {
+    // check for the presence of data and initiate request if necessary
     if (!store.getState().todos.data?.length) {
       store.dispatch(fetchUserTodos(params.id));
       store.dispatch(END);
       await store.sagaTask.toPromise();
     }
+
     const { data } = store.getState().todos;
+
+    // return props object that will be passed to the `Todos` component
     return { props: { data } };
   }
 );
