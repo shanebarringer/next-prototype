@@ -505,6 +505,56 @@ export default Todos;
 - Create two arrays (for presentational purposes only)
 
 
+## Blogs
+
+The Blogs component will function almost identically to `Users`. However, for demo purposes, we're returning a `props` object from `getStaticProps ` 
+
+```javascript
+// imports ...
+
+const Blogs = ({ data }) => {
+  // return jsx...
+};
+
+export const getStaticProps = wrapper.getStaticProps(async ({ store }) => {
+  if (!store.getState().blogs.data?.length) {
+    store.dispatch(fetchAllBlogs());
+    store.dispatch(END);
+    await store.sagaTask.toPromise();
+  }
+  const { data } = store.getState().blogs;
+
+	// provide props object containing blog data 
+  return { props: { data } };
+});
+
+export default Blogs;
+```
+
+
+
+In additon, we'll use the `title` as a param instead of `id` as that seems to make more sense for an article/post. 
+
+``` javascript
+const Blogs = ({ data }) => {
+  return (
+    {/* ... */}
+        {data.map((blog) => (
+          <div className={styles.card} key={blog.id}>
+            <Link href="/blogs/[title]" as={`/blogs/${kebabCase(blog.title)}`}>
+              {blog.title}
+            </Link>
+         ))}
+     {/* ... */}
+   );
+ };
+```
+
+
+#### Todo
+
+- Document `getStaticPaths` - for now, please refer to the [docs](https://nextjs.org/docs/basic-features/data-fetching#getstaticpaths-static-generation)
+
 ---
 
 
@@ -546,18 +596,5 @@ export async function getAllPostIds() {
   })
 }
 ```
-
-#### Fallback
-
-`getStaticPaths` has a `fallback` attribute
-
-> If `fallback` is `false`, then any paths not returned by `getStaticPaths` will result in a `404` page.
-
-> If `fallback` is `true`, then the behavior of `getStaticProps` changes:
-
-> - The paths returned from `getStaticPaths` will be rendered to HTML at build time.
-> - The paths that have not been generated at build time will not result in a `404` page. Instead, Next.js will serve a “fallback” version of the page on the first request to such a path.
-> - In the background, Next.js will statically generate the requested path. Subsequent requests to the same path will serve the generated page, just like other pages pre-rendered at build time.
-
 
 

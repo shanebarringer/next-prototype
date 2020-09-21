@@ -1,7 +1,7 @@
-import React, { useEffect } from 'react';
+import React from 'react';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
 import { END } from 'redux-saga';
+import { useRouter } from 'next/router';
 import { kebabCase } from 'lodash';
 import { fetchAllBlogs } from '../../actions';
 import { wrapper } from '../../store';

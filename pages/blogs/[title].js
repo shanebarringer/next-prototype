@@ -25,6 +25,16 @@ const BlogPost = ({ data }) => {
   );
 };
 
+export async function getStaticPaths() {
+  return {
+    paths: [
+      { params: { title: 'title-format-example' } },
+      { params: { title: '/qui-est-esse' } },
+    ],
+    fallback: true,
+  };
+}
+
 export const getStaticProps = wrapper.getStaticProps(async ({ store }) => {
   if (!store.getState().blogs.data?.length) {
     store.dispatch(fetchAllBlogs());
@@ -35,12 +45,5 @@ export const getStaticProps = wrapper.getStaticProps(async ({ store }) => {
 
   return { props: { data } };
 });
-
-export async function getStaticPaths() {
-  return {
-    paths: ['/blogs/title-here', { params: { title: 'kebab-cased' } }],
-    fallback: true,
-  };
-}
 
 export default BlogPost;
