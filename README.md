@@ -84,7 +84,7 @@ _note: `getStaticPaths` & `getStaticProps` will be covered later in this documen
 >- Create a file in `pages/post` directory named `[id].js`[]
   *Pages that begin with [ and end with ] are dynamic routes in Next.js.*
 >- `export` an `async` function named `getStaticPaths` from this page. 
-  *In this function... return a list of possible values for id.**
+  *In this function... return a list of possible values for ID**
 >- Finally...implement `getStaticProps` again - this time, to fetch necessary data for the blog post with a given id
 
 
@@ -92,7 +92,7 @@ _note: `getStaticPaths` & `getStaticProps` will be covered later in this documen
 
 ## Walkthrough
 
-While Next.js has quite a few awesome features like internal API routes and direct interactions with a DB, our scope will be limited working with data fetched from a seperate API. 
+While Next.js has quite a few awesome features like internal API routes and direct interactions with a DB, our scope will be limited working with data fetched from a separate API. 
 
 Ultimately, this prototype seeks to mimic our current application structure and configuration. 
 
@@ -177,7 +177,7 @@ const usersReducer = (state = initialState, action) => {
 };
 ```
 
-*When the `HYRDATE` action is dispatched*
+*When the `HYDRATE` action is dispatched*
 1. create a `nextState` object
 2. use previous state and pass in any data from the action's payload
 3. _if_ the state already had data
